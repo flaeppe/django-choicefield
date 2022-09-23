@@ -366,3 +366,12 @@ class TestSerialization(TestCase):
                 "inlined_enum": InlinedModel.InlinedEnum.VALUE,
             }
         ]
+
+    def test_errors_fetching_row_with_unknown_enum_value(self):
+        with connection.cursor() as cursor:
+            cursor.execute('UPDATE test_app_choicemodel SET text_choice = "UNKNOWN"')
+
+        with pytest.raises(
+            ValidationError, match=r"'UNKNOWN' is not a valid TextChoice"
+        ):
+            list(ChoiceModel.objects.values())
