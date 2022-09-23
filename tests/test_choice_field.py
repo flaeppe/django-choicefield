@@ -367,7 +367,7 @@ class TestSerialization(TestCase):
             }
         ]
 
-    def test_errors_fetching_row_with_unknown_enum_value(self):
+    def test_errors_fetching_row_with_unknown_enum_value(self) -> None:
         with connection.cursor() as cursor:
             cursor.execute('UPDATE test_app_choicemodel SET text_choice = "UNKNOWN"')
 
