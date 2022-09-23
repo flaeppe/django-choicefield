@@ -2,6 +2,7 @@
 
 <p align=left>
     <a href=https://github.com/flaeppe/django-choicefield/actions?query=workflow%3ACI+branch%3Amain><img src=https://github.com/flaeppe/django-choicefield/workflows/CI/badge.svg alt="CI Build Status"></a>
+    <a href="https://codecov.io/gh/flaeppe/django-choicefield" > <img src="https://codecov.io/gh/flaeppe/django-choicefield/branch/main/graph/badge.svg?token=SV7YKU958R"/> </a>
     <a href=https://pypi.org/project/django-choicefield/><img src=https://img.shields.io/pypi/v/django-choicefield.svg?color=informational&label=PyPI alt="PyPI Package"></a>
 </p>
 
