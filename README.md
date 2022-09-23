@@ -101,7 +101,7 @@ If you want to access the stored database values, without conversion to your enu
 you can use the registered `__raw` transformer.
 
 ```python
-Cart.objects.values("suit__raw")
+Card.objects.values("suit__raw")
 # <QuerySet [{'suit__raw': 2}]>
 ```
 
