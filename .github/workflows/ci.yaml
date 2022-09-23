@@ -60,3 +60,14 @@ jobs:
       - run: pip install tox
       - name: Run mypy
         run: tox -e mypy
+
+  check-migrations:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+      - run: pip install tox
+      - name: Check migrations
+        run: tox -e check-migrations

@@ -25,3 +25,10 @@ createsuperuser: export DJANGO_DATABASE_NAME=$(PROJECT_DIR)/tests/db.sqlite3
 createsuperuser:
 	django-admin migrate
 	django-admin createsuperuser
+
+
+.PHONY: check-migrations
+check-migrations: export PYTHONPATH=$(PROJECT_DIR)
+check-migrations: export DJANGO_SETTINGS_MODULE=tests.settings
+check-migrations:
+	@django-admin makemigrations --check --dry-run
