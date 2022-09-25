@@ -5,6 +5,7 @@ import pytest
 from django.core import serializers
 from django.core.exceptions import ValidationError
 from django.db import connection, models
+from django.db.models.expressions import Value
 from django.test import TestCase
 from parameterized import parameterized
 
@@ -68,6 +69,23 @@ class TestSave(TestCase):
         assert native.str_enum is StrEnum.A
         assert native.int_enum is IntEnum.THREE
 
+    def test_can_build_and_save_with_enum(self) -> None:
+        choice = ChoiceModel()
+        choice.text_choice = TextChoice.FIRST
+        choice.int_choice = IntChoice.TWO
+        choice.save()
+        choice.refresh_from_db(fields=["text_choice", "int_choice"])
+        assert choice.text_choice is TextChoice.FIRST
+        assert choice.int_choice is IntChoice.TWO
+
+        native = NativeEnumModel()
+        native.str_enum = StrEnum.B
+        native.int_enum = IntEnum.FOUR
+        native.save()
+        native.refresh_from_db(fields=["str_enum", "int_enum"])
+        assert native.str_enum is StrEnum.B
+        assert native.int_enum is IntEnum.FOUR
+
     def test_raises_validation_error_saving_with_unknown_enum_value(self) -> None:
         with pytest.raises(
             ValidationError, match=r"'THIRD' is not a valid TextChoice"
@@ -118,7 +136,9 @@ class TestFilter(TestCase):
         ChoiceModel.objects.create(
             text_choice=TextChoice.FIRST, int_choice=IntChoice.TWO
         )
+        NativeEnumModel.objects.create(str_enum=StrEnum.B, int_enum=IntEnum.FOUR)
         NullableModel.objects.create()
+        InlinedModel.objects.create(inlined_enum=InlinedModel.InlinedEnum.VALUE)
 
     def test_can_equals_filter_on_enum(self) -> None:
         assert ChoiceModel.objects.filter(text_choice=TextChoice.FIRST).exists() is True
@@ -142,6 +162,36 @@ class TestFilter(TestCase):
 
     def test_can_filter_equals_none(self) -> None:
         assert NullableModel.objects.filter(choice=None).exists() is True
+
+    def test_can_filter_unknown_values_with_raw(self) -> None:
+        with connection.cursor() as cursor:
+            cursor.execute(
+                'UPDATE test_app_nativeenummodel SET str_enum = "UNKNOWN",'
+                " int_enum = 1337"
+            )
+            cursor.execute(
+                'UPDATE test_app_choicemodel SET text_choice = "UNKNOWN",'
+                " int_choice = 1337"
+            )
+            cursor.execute(
+                "UPDATE test_app_inlinedmodel SET inlined_default = 1337,"
+                " inlined_enum = 1338"
+            )
+
+        choices = ChoiceModel.objects.filter(
+            text_choice=Value("UNKNOWN"), int_choice=Value(1337)
+        ).values_list("text_choice__raw", "int_choice__raw")
+        assert list(choices) == [("UNKNOWN", 1337)]
+
+        natives = NativeEnumModel.objects.filter(
+            str_enum=Value("UNKNOWN"), int_enum=Value(1337)
+        ).values_list("str_enum__raw", "int_enum__raw")
+        assert list(natives) == [("UNKNOWN", 1337)]
+
+        inlines = InlinedModel.objects.filter(
+            inlined_default=Value(1337), inlined_enum=Value(1338)
+        ).values_list("inlined_default__raw", "inlined_enum__raw")
+        assert list(inlines) == [(1337, 1338)]
 
 
 class TestUpdate(TestCase):
@@ -176,6 +226,28 @@ class TestUpdate(TestCase):
             ).exists()
             is True
         )
+
+    def test_errors_updating_to_unknown_value(self) -> None:
+        with pytest.raises(
+            ValidationError, match=r"'UNKNOWN' is not a valid TextChoice"
+        ):
+            ChoiceModel.objects.update(text_choice="UNKNOWN")
+        with pytest.raises(ValidationError, match=r"1337 is not a valid IntChoice"):
+            ChoiceModel.objects.update(int_choice=1337)
+        with pytest.raises(ValidationError, match=r"1337 is not a valid IntChoice"):
+            NullableModel.objects.update(choice=1337)
+        with pytest.raises(ValidationError, match=r"'UNKNOWN' is not a valid StrEnum"):
+            NativeEnumModel.objects.update(str_enum="UNKNOWN")
+        with pytest.raises(ValidationError, match=r"1337 is not a valid IntEnum"):
+            NativeEnumModel.objects.update(int_enum=1337)
+        with pytest.raises(
+            ValidationError, match=r"1337 is not a valid InlinedModel.InlinedEnum"
+        ):
+            InlinedModel.objects.update(inlined_default=1337)
+        with pytest.raises(
+            ValidationError, match=r"1337 is not a valid InlinedModel.InlinedEnum"
+        ):
+            InlinedModel.objects.update(inlined_enum=1337)
 
     def test_can_do_application_update_with_enum(self) -> None:
         self.instance.text_choice = TextChoice.FIRST
@@ -293,6 +365,14 @@ class TestChoiceField:
         field = ChoiceField(IntChoice)
         with pytest.raises(ValidationError, match=r"1337 is not a valid choice"):
             field.validate(value=1337, model_instance=None)
+
+    def test_get_db_prep_value_handles_prepared_enum(self) -> None:
+        value = ChoiceField(InlinedModel.InlinedEnum).get_db_prep_value(
+            value=InlinedModel.InlinedEnum.VALUE,
+            connection=None,  # type: ignore[arg-type]
+            prepared=True,
+        )
+        assert value == 0
 
 
 class TestSerialization(TestCase):

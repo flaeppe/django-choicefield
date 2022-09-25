@@ -106,6 +106,22 @@ Card.objects.values("suit__raw")
 # <QuerySet [{'suit__raw': 2}]>
 ```
 
+#### Getting unrecognized values from database
+
+In case of e.g. a migration where an enum has changed by, say, removing a value. The
+database could have values not recognized by the registered enum. Thus it could be
+necessary to retrieve values _without_ casting them to an enum instance, as it'd raise
+an error.
+
+It can be done using the `__raw` transformer while also sidestepping enum validation in
+filter values by using
+[`Value` expressions](https://docs.djangoproject.com/en/dev/ref/models/expressions/#value-expressions)
+
+```python
+Card.objects.filter(suit=Value(1337)).values_list("suit__raw", flat=True)
+# <QuerySet [(1337,)]>
+```
+
 ### Installation
 
 Using `pip`
