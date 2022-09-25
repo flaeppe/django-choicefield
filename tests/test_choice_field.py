@@ -193,9 +193,6 @@ class TestFilter(TestCase):
         ).values_list("inlined_default__raw", "inlined_enum__raw")
         assert list(inlines) == [(1337, 1338)]
 
-    def test_filter_null(self):
-        ChoiceModel.objects.filter(text_choice=None)
-
 
 class TestUpdate(TestCase):
     instance: ChoiceModel
@@ -371,7 +368,9 @@ class TestChoiceField:
 
     def test_get_db_prep_value_handles_prepared_enum(self) -> None:
         value = ChoiceField(InlinedModel.InlinedEnum).get_db_prep_value(
-            value=InlinedModel.InlinedEnum.VALUE, connection=None, prepared=True
+            value=InlinedModel.InlinedEnum.VALUE,
+            connection=None,  # type: ignore[arg-type]
+            prepared=True,
         )
         assert value == 0
 
