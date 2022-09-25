@@ -1,4 +1,4 @@
-exclude Makefile
+exclude Taskfile.yml
 exclude .editorconfig
 exclude tox.ini
 recursive-exclude .github *

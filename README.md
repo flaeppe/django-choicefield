@@ -114,7 +114,9 @@ Using `pip`
 $ pip install django-choicefield
 ```
 
-### Running tests
+### Development
+
+#### Running tests
 
 Running the whole test matrix
 
@@ -122,13 +124,34 @@ Running the whole test matrix
 $ tox
 ```
 
-Running the test suite for one environment
+Running test suite with an editable install
+
+```console
+$ tox -e dev
+```
+
+Running the test suite for one environment (non editable)
 
 e.g. `Django==4.0.x` and `Python3.11`
 
 ```console
 $ tox -e django40-py311
 ```
+
+#### Start a local example project
+
+There are a couple of shortcut commands available using
+[Taskfile](https://taskfile.dev/), for your convenience.
+
+e.g.
+
+```console
+$ task manage -- createsuperuser
+$ task runserver
+```
+
+After [installing Taskfile](https://taskfile.dev/installation/) you can run
+`task --list-all` to find all available commands.
 
 ### Compatibility
 

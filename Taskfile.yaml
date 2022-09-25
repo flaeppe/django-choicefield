@@ -1,0 +1,39 @@
+version: '3'
+
+env:
+  PYTHONPATH: "{{.ROOT_DIR}}"
+  DJANGO_SETTINGS_MODULE: tests.settings
+
+vars:
+  SQLITE_DB: "{{.ROOT_DIR}}/tests/db.sqlite3"
+
+tasks:
+  manage:
+    desc: Run a Django management command
+    silent: true
+    cmds: ["django-admin {{.COMMAND}} {{.CLI_ARGS}}"]
+    env:
+      DJANGO_DATABASE_NAME: "{{.SQLITE_DB}}"
+
+  runserver:
+    desc: Migrate database schema and start Django's development web server
+    silent: true
+    deps:
+      - task: manage
+        vars: {COMMAND: migrate}
+    cmds:
+      - task: manage
+        vars: {COMMAND: runserver}
+
+  check-migrations:
+    desc: Check if there are any migration changes
+    silent: true
+    cmds:
+      - task: manage
+        vars: {COMMAND: makemigrations --check --dry-run}
+
+  reset-db:
+    desc: Remove the configured database
+    silent: true
+    cmds:
+      - rm -f {{.SQLITE_DB}}
