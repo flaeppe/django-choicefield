@@ -31,7 +31,7 @@ class ChoiceModelAdmin(admin.ModelAdmin):  # type: ignore[type-arg]
 
 
 class NullableModel(models.Model):
-    choice = ChoiceField(IntChoice, null=True)
+    choice = ChoiceField(IntChoice, null=True, blank=True)
 
     class Meta:
         app_label = "test_app"

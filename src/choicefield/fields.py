@@ -9,6 +9,7 @@ from django.db import models
 from django.db.models.enums import Choices
 from django.db.models.fields import Field
 from django.db.models.lookups import Transform
+from django.forms import Field as FormField, TypedChoiceField
 
 if TYPE_CHECKING:
     from django.db.models.fields import _ChoicesList
@@ -115,6 +116,10 @@ class ChoiceField(Field):  # type: ignore[type-arg]
             value = value.value
         super().validate(value, model_instance)
 
+    def formfield(self, *args: Any, **kwargs: Any) -> FormField:
+        kwargs.setdefault("choices_form_class", ChoiceFormField)
+        return super().formfield(*args, **kwargs)  # type: ignore[no-any-return]
+
     def get_prep_value(self, value: Any) -> Any:
         value = self.to_python(super().get_prep_value(value))
         if value is None and not self.null:
@@ -141,3 +146,10 @@ class ChoiceField(Field):  # type: ignore[type-arg]
 class RawValue(Transform):
     lookup_name = "raw"
     template = "%(expressions)s"
+
+
+class ChoiceFormField(TypedChoiceField):
+    def prepare_value(self, value: Any) -> Any:
+        if isinstance(value, Enum):
+            return value.value
+        return value
