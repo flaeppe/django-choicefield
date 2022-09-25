@@ -6,6 +6,7 @@ from typing import TYPE_CHECKING, Any, Final, TypeVar, cast
 
 from django.core.exceptions import ValidationError
 from django.db import models
+from django.db.backends.base.base import BaseDatabaseWrapper
 from django.db.models.enums import Choices
 from django.db.models.fields import Field
 from django.db.models.lookups import Transform
@@ -122,11 +123,20 @@ class ChoiceField(Field):  # type: ignore[type-arg]
 
     def get_prep_value(self, value: Any) -> Any:
         value = self.to_python(super().get_prep_value(value))
-        if value is None and not self.null:
-            raise ValidationError(self.error_messages["null"], code="null")
-        elif isinstance(value, self.enum):
+        if isinstance(value, self.enum):
             return value.value
         return value
+
+    def get_db_prep_value(
+        self, value: Any, connection: BaseDatabaseWrapper, prepared: bool = False
+    ) -> Any:
+        prepared_value = super().get_db_prep_value(value, connection, prepared)
+        if prepared_value is None and not self.null:
+            raise ValidationError(self.error_messages["null"], code="null")
+        elif isinstance(prepared_value, self.enum):
+            prepared_value = prepared_value.value
+
+        return prepared_value
 
     def value_to_string(self, obj: M) -> Any:
         value = self.value_from_object(obj)
