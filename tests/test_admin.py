@@ -5,12 +5,20 @@ from django.contrib.auth.models import User
 from django.test import TestCase
 from django.urls import reverse
 
-from .test_app.models import ChoiceModel, IntChoice, TextChoice
+from .test_app.models import (
+    ChoiceModel,
+    IntChoice,
+    IntEnum,
+    NativeEnumModel,
+    StrEnum,
+    TextChoice,
+)
 
 
 class TestViews(TestCase):
     user: User
     choice: ChoiceModel
+    native: NativeEnumModel
 
     @classmethod
     def setUpTestData(cls) -> None:
@@ -18,6 +26,9 @@ class TestViews(TestCase):
         cls.user = User.objects.create_superuser(username="test", password="test")
         cls.choice = ChoiceModel.objects.create(
             text_choice=TextChoice.SECOND, int_choice=IntChoice.ONE
+        )
+        cls.native = NativeEnumModel.objects.create(
+            str_enum=StrEnum.B, int_enum=IntEnum.FOUR
         )
 
     def setUp(self) -> None:
@@ -48,3 +59,14 @@ class TestViews(TestCase):
         self.choice.refresh_from_db(fields=["text_choice", "int_choice"])
         assert self.choice.text_choice is TextChoice.FIRST
         assert self.choice.int_choice is IntChoice.TWO
+
+    def test_renders_form_selections_for_native_enum(self) -> None:
+        url = reverse("admin:test_app_nativeenummodel_change", args=[self.native.pk])
+        response = self.client.get(url)
+        assert response.status_code == HTTPStatus.OK
+        self.assertContains(
+            response, '<option value="B" selected>B</option>', html=True
+        )
+        self.assertContains(
+            response, '<option value="4" selected>FOUR</option>', html=True
+        )
