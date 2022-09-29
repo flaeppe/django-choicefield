@@ -15,7 +15,7 @@ jobs:
     name: Lint
     uses: less-action/reusables/.github/workflows/pre-commit.yaml@v6
     with:
-      python-version: "3.9"
+      python-version: "3.10"
 
   check-build:
     name: Check packaging
