@@ -5,11 +5,65 @@ build-backend = "setuptools.build_meta"
 [tool.black]
 line-length = 88
 
-[tool.isort]
-profile = "black"
-src_paths = ["src", "tests"]
-combine_as_imports = true
-skip = "migrations"
+[tool.ruff]
+src = ["src"]
+fix = true
+exclude = [
+  ".git",
+  ".mypy_cache",
+  ".venv",
+  "build",
+  "dist",
+  "migrations",
+  "venv",
+]
+ignore = [
+  "RET505",  # We don't like this option
+  "RET506",  # We don't like this option
+  "TRY003",  # We don't care about length of messages for exception classes
+]
+line-length = 88
+select = [
+    "B",
+    "BLE",
+    "C4",
+    "C9",
+    "C90",
+    "DTZ",
+    "E",
+    "EXE",
+    "F",
+    "FBT",
+    "I",
+    "INP",
+    "ISC",
+    "PGH",
+    "PIE",
+    "PL",
+    "PT",
+    "PTH",
+    "RET",
+    "RSE",
+    "RUF",
+    "T10",
+    "T20",
+    "TID",
+    "TRY",
+    "UP",
+    "W",
+    "YTT"
+]
+target-version = "py39"
+
+[tool.ruff.mccabe]
+max-complexity = 8
+
+[tool.ruff.isort]
+known-first-party = ["src/", "tests/"]
+combine-as-imports = true
+
+[tool.ruff.pylint]
+allow-magic-value-types = ["str", "bytes", "int"]
 
 [tool.coverage.paths]
 source = [
