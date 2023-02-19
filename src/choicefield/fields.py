@@ -127,7 +127,10 @@ class ChoiceField(Field):  # type: ignore[type-arg]
         return value
 
     def get_db_prep_value(
-        self, value: Any, connection: BaseDatabaseWrapper, prepared: bool = False
+        self,
+        value: Any,
+        connection: BaseDatabaseWrapper,
+        prepared: bool = False,  # noqa: FBT001,FBT002
     ) -> Any:
         prepared_value = super().get_db_prep_value(value, connection, prepared)
         if prepared_value is None and not self.null:
