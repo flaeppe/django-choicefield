@@ -88,8 +88,7 @@ class ChoiceField(Field):  # type: ignore[type-arg]
 
     def enum_to_choices(self, enum: type[T]) -> _ChoicesList:
         if hasattr(enum, "choices"):
-            # TODO: See https://github.com/typeddjango/django-stubs/pull/1154
-            return cast(type[Choices], enum).choices  # type: ignore[return-value]
+            return cast(type[Choices], enum).choices
         return [(member.value, member.name) for member in enum]
 
     def get_internal_type(self) -> str:

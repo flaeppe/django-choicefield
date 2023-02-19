@@ -41,11 +41,11 @@ class TestViews(TestCase):
         data = {"text_choice": 1, "int_choice": 2}
         response = self.client.post(url, data)
         assert response.status_code == HTTPStatus.OK
-        assert len(response.context["errors"]) == 1  # type: ignore[call-overload]
+        assert len(response.context["errors"]) == 1
         assert (
             re.match(
                 r".*1 is not one of the available choices.*",
-                response.context["errors"][0][0],  # type: ignore[call-overload]
+                response.context["errors"][0][0],
             )
             is not None
         )
