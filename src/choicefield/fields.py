@@ -68,11 +68,7 @@ class ChoiceField(Field):  # type: ignore[type-arg]
         self._values = kwargs.pop("_values", None) or tuple(
             member.value for member in self.enum
         )
-        # Mypy: IMO `type[T]` should already support `iter()`. As it works for concrete
-        # subclasses of `enum.Enum`.
-        self.python_type = type(
-            next(iter(self.enum)).value  # type: ignore[call-overload]
-        )
+        self.python_type = type(next(iter(self.enum)).value)
         try:
             self._internal_type = supported_internal_types[self.python_type]
         except KeyError as exc:
