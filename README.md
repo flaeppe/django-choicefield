@@ -175,6 +175,7 @@ After [installing Taskfile](https://taskfile.dev/installation/) you can run
 
 | Django version | Python version |
 | -------------- | -------------- |
+| 4.2.x          | ^3.9           |
 | 4.1.x          | ^3.9           |
 | 4.0.x          | ^3.9           |
 | 3.2.x          | ^3.9           |
