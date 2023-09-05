@@ -51,7 +51,7 @@ jobs:
             tox_env: "django32-py39"
     name: Test ${{ matrix.tox_env }}
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - uses: actions/setup-python@v4
         with:
           python-version: ${{ matrix.python-version }}
@@ -68,7 +68,7 @@ jobs:
   static-typing:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - uses: actions/setup-python@v4
         with:
           python-version: '3.9'
@@ -79,7 +79,7 @@ jobs:
   check-migrations:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - uses: actions/setup-python@v4
         with:
           python-version: '3.9'
