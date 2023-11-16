@@ -114,7 +114,7 @@ class ChoiceField(Field):  # type: ignore[type-arg]
 
     def formfield(self, *args: Any, **kwargs: Any) -> FormField:
         kwargs.setdefault("choices_form_class", ChoiceFormField)
-        return super().formfield(*args, **kwargs)  # type: ignore[no-any-return]
+        return super().formfield(*args, **kwargs)
 
     def get_prep_value(self, value: Any) -> Any:
         value = self.to_python(super().get_prep_value(value))
