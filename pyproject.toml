@@ -1,9 +1,64 @@
 [build-system]
-build-backend = "setuptools.build_meta"
+build-backend = "hatchling.build"
 requires = [
-  "setuptools>=67.3.2",
-  "wheel",
+  "hatch-vcs",
+  "hatchling",
 ]
+
+[project]
+name = "django-choicefield"
+description = "ChoiceField for Django models"
+readme = "README.md"
+keywords = [
+  "choicefield",
+  "choices",
+  "django",
+  "field",
+]
+license = "BSD-3-Clause"
+authors = [{ name = "Petter Friberg", email = "petter_friberg@hotmail.com" }]
+requires-python = ">=3.9"
+classifiers = [
+  "Development Status :: 4 - Beta",
+  "Framework :: Django",
+  "Framework :: Django :: 3.2",
+  "Framework :: Django :: 4.0",
+  "Framework :: Django :: 4.1",
+  "Framework :: Django :: 4.2",
+  "Framework :: Django :: 5.0",
+  "Intended Audience :: Developers",
+  "Operating System :: OS Independent",
+  "Programming Language :: Python",
+  "Programming Language :: Python :: 3 :: Only",
+  "Programming Language :: Python :: 3.9",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+  "Typing :: Typed",
+]
+dynamic = [
+  "version",
+]
+dependencies = [
+  "Django>=3.2",
+]
+optional-dependencies.test = [
+  "django-stubs",
+  "parameterized",
+  "pytest",
+  "pytest-cov",
+  "pytest-django",
+]
+urls.Homepage = "https://github.com/flaeppe/django-choicefield"
+urls.Source = "https://github.com/flaeppe/django-choicefield"
+urls.Tracker = "https://github.com/flaeppe/django-choicefield/issues"
+
+[tool.hatch]
+build.hooks.vcs.version-file = "src/choicefield/_version.py"
+version.source = "vcs"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/choicefield"]
 
 [tool.black]
 line-length = 88

@@ -49,13 +49,6 @@ repos:
           - --parser=markdown
           - --print-width=88
           - --prose-wrap=always
-  - repo: https://github.com/mgedmin/check-manifest
-    rev: "0.49"
-    hooks:
-      - id: check-manifest
-        args: ["--no-build-isolation"]
-        additional_dependencies:
-          - setuptools>=67.3.2
 
 exclude: |
   (?x)(

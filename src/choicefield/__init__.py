@@ -1,4 +1,8 @@
 from .fields import ChoiceField
 
-__all__ = ("ChoiceField",)
-__version__ = "0.2.2"
+try:
+    from ._version import __version__
+except ImportError:  # pragma: no cover
+    __version__ = "unknown"
+
+__all__ = ("__version__", "ChoiceField")
