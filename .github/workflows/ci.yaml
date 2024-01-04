@@ -24,49 +24,59 @@ jobs:
     uses: less-action/reusables/.github/workflows/python-test-build.yaml@v10
 
   test:
+    name: Test django${{ matrix.django }}-py${{ matrix.py }}
     runs-on: ubuntu-latest
     strategy:
+      fail-fast: false
       matrix:
         include:
-          # 3.12
-          - python-version: "3.12"
-            tox_env: "django42-py312"
-          # 3.11
-          - python-version: "3.11"
-            tox_env: "django41-py311"
-          - python-version: "3.11"
-            tox_env: "django40-py311"
-          # 3.10
-          - python-version: "3.10"
-            tox_env: "django_main"
-          - python-version: "3.10"
-            tox_env: "django41-py310"
-          - python-version: "3.10"
-            tox_env: "django40-py310"
-          - python-version: "3.10"
-            tox_env: "django32-py310"
-          # 3.9
-          - python-version: "3.9"
-            tox_env: "django41-py39"
-          - python-version: "3.9"
-            tox_env: "django40-py39"
-          - python-version: "3.9"
-            tox_env: "django32-py39"
-    name: Test ${{ matrix.tox_env }}
+          - { py: "3.12", django: "42" }
+          - { py: "3.11", django: "41" }
+          - { py: "3.11", django: "40" }
+          - { py: "3.10", django: "41" }
+          - { py: "3.10", django: "40" }
+          - { py: "3.10", django: "32" }
+          - { py: "3.9", django: "41" }
+          - { py: "3.9", django: "40" }
+          - { py: "3.9", django: "32" }
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with:
-          python-version: ${{ matrix.python-version }}
-      - run: pip install tox
-      - name: Run tests
-        run: tox -e ${{ matrix.tox_env }}
+          python-version: "3.12"
+      - run: python -m pip install tox
+      - name: Setup python for test ${{ matrix.py }} - django${{ matrix.django }}
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.py }}
+      - name: Setup test suite
+        run: tox -e django${{ matrix.django }}-py${{ matrix.py }} -vv --notest
+      - name: Run test suite
+        run: tox -e django${{ matrix.django }}-py${{ matrix.py }} --skip-pkg-install
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v3
         with:
           file: ./coverage.xml
           fail_ci_if_error: true
-          name: codecov-py${{ matrix.python-version }}
+          name: codecov-py${{ matrix.py }}
+
+  main:
+    runs-on: ubuntu-latest
+    name: Test django_main
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: python -m pip install tox
+      - name: Setup python for test 3.12 - django main branch
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Setup test suite
+        run: tox -e django_main -vv --notest
+      - name: Run test suite
+        run: tox -e django_main --skip-pkg-install
 
   static-typing:
     runs-on: ubuntu-latest
