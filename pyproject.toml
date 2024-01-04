@@ -1,6 +1,9 @@
 [build-system]
-requires = ["setuptools>=67.3.2", "wheel"]
 build-backend = "setuptools.build_meta"
+requires = [
+  "setuptools>=67.3.2",
+  "wheel",
+]
 
 [tool.black]
 line-length = 88
@@ -88,6 +91,17 @@ exclude_lines = [
   "if TYPE_CHECKING:",
 ]
 
+[[tool.mypy.overrides]]
+module = [
+  "*.migrations.*",
+]
+ignore_errors = true
+
+[[tool.mypy.overrides]]
+module = [
+  "parameterized.*",
+]
+ignore_missing_imports = true
 [tool.mypy]
 python_version = "3.10"
 pretty = true
@@ -114,15 +128,3 @@ plugins = ["mypy_django_plugin.main"]
 
 [tool.django-stubs]
 django_settings_module = "tests.settings"
-
-[[tool.mypy.overrides]]
-module = [
-  "*.migrations.*",
-]
-ignore_errors = true
-
-[[tool.mypy.overrides]]
-module = [
-  "parameterized.*",
-]
-ignore_missing_imports = true
