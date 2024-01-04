@@ -1,6 +1,8 @@
 exclude Taskfile.yml
 exclude .editorconfig
 exclude tox.ini
+exclude flake.lock
+exclude flake.nix
 recursive-exclude .github *
 recursive-exclude tests *
 recursive-include src py.typed
