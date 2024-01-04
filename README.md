@@ -140,7 +140,7 @@ Running the whole test matrix
 $ tox
 ```
 
-Running test suite with an editable install
+Setting up a development environment
 
 ```console
 $ tox -e dev
@@ -175,6 +175,7 @@ After [installing Taskfile](https://taskfile.dev/installation/) you can run
 
 | Django version | Python version |
 | -------------- | -------------- |
+| 5.0.x          | ^3.10          |
 | 4.2.x          | ^3.9           |
 | 4.1.x          | ^3.9           |
 | 4.0.x          | ^3.9           |
