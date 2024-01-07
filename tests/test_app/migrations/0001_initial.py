@@ -33,8 +33,8 @@ class Migration(migrations.Migration):
             name='NativeEnumModel',
             fields=[
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('str_enum', choicefield.ChoiceField(_values=('A', 'B'), enum=tests.test_app.models.StrEnum, max_length=255)),
-                ('int_enum', choicefield.ChoiceField(_values=(3, 4), enum=tests.test_app.models.IntEnum)),
+                ('str_enum', choicefield.ChoiceField(_values=('A', 'B'), enum=tests.test_app.models.StringEnum, max_length=255)),
+                ('int_enum', choicefield.ChoiceField(_values=(3, 4), enum=tests.test_app.models.IntegerEnum)),
             ],
         ),
         migrations.CreateModel(
