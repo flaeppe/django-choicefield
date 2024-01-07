@@ -60,10 +60,10 @@ version.source = "vcs"
 packages = ["src/choicefield"]
 
 [tool.black]
-line-length = 88
+target-version = ["py39"]
 
 [tool.ruff]
-src = ["src"]
+src = ["src", "tests"]
 fix = true
 exclude = [
   ".git",
@@ -75,25 +75,32 @@ exclude = [
   "venv",
 ]
 ignore = [
+  "DJ001",  # Allow null=True
+  "DJ008",  # Don't require a __str__ method
   "RET505",  # We don't like this option
   "RET506",  # We don't like this option
+  "S101",  # Allow asserts
   "TRY003",  # We don't care about length of messages for exception classes
 ]
 line-length = 88
 select = [
+    "A",
     "B",
     "BLE",
     "C4",
     "C9",
     "C90",
+    "DJ",
     "DTZ",
     "E",
     "EXE",
     "F",
+    "FA",
     "FBT",
     "I",
     "INP",
     "ISC",
+    "N",
     "PGH",
     "PIE",
     "PL",
@@ -102,6 +109,9 @@ select = [
     "RET",
     "RSE",
     "RUF",
+    "S",
+    "SIM",
+    "SLOT",
     "T10",
     "T20",
     "TID",
@@ -111,6 +121,9 @@ select = [
     "YTT"
 ]
 target-version = "py39"
+
+[tool.ruff.per-file-ignores]
+"tests/**" = ["S105", "S106"]
 
 [tool.ruff.mccabe]
 max-complexity = 8
