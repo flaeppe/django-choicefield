@@ -44,7 +44,6 @@ dependencies = [
 ]
 optional-dependencies.test = [
   "django-stubs",
-  "parameterized",
   "pytest",
   "pytest-cov",
   "pytest-django",
@@ -152,11 +151,6 @@ module = [
 ]
 ignore_errors = true
 
-[[tool.mypy.overrides]]
-module = [
-  "parameterized.*",
-]
-ignore_missing_imports = true
 [tool.mypy]
 python_version = "3.10"
 pretty = true

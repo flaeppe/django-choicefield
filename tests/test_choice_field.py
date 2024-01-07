@@ -7,7 +7,6 @@ from django.core.exceptions import ValidationError
 from django.db import connection, models
 from django.db.models.expressions import Value
 from django.test import TestCase
-from parameterized import parameterized
 
 from choicefield import ChoiceField
 from choicefield.fields import Choice
@@ -26,16 +25,18 @@ from .test_app.models import (
 M = TypeVar("M", bound=models.Model)
 
 
-class TestSave(TestCase):
-    @parameterized.expand(  # type: ignore[misc]
-        (
-            ("django_enum_instance", ChoiceModel),
-            ("native_enum_instance", NativeEnumModel),
-            ("inlined_enum_instance", InlinedModel),
-        )
+@pytest.mark.django_db()
+class TestSave:
+    @pytest.mark.parametrize(
+        "Model",
+        [
+            pytest.param(ChoiceModel, id="django_enum_instance"),
+            pytest.param(NativeEnumModel, id="native_enum_instance"),
+            pytest.param(InlinedModel, id="inlined_enum_instance"),
+        ],
     )
-    def test_errors_saving_unpopulated(self, _: str, Model: M) -> None:  # noqa: PT019
-        unsaved = Model()  # type: ignore[operator]
+    def test_errors_saving_unpopulated(self, Model: type[M]) -> None:
+        unsaved = Model()
         with pytest.raises(ValidationError, match=r"field cannot be null"):
             unsaved.save()
 
