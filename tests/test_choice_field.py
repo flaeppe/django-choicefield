@@ -28,15 +28,15 @@ M = TypeVar("M", bound=models.Model)
 @pytest.mark.django_db()
 class TestSave:
     @pytest.mark.parametrize(
-        "Model",
+        "model",
         [
             pytest.param(ChoiceModel, id="django_enum_instance"),
             pytest.param(NativeEnumModel, id="native_enum_instance"),
             pytest.param(InlinedModel, id="inlined_enum_instance"),
         ],
     )
-    def test_errors_saving_unpopulated(self, Model: type[M]) -> None:
-        unsaved = Model()
+    def test_errors_saving_unpopulated(self, model: type[M]) -> None:
+        unsaved = model()
         with pytest.raises(ValidationError, match=r"field cannot be null"):
             unsaved.save()
 
@@ -311,7 +311,7 @@ class TestChoiceDescriptor(TestCase):
 class TestChoiceField:
     def test_raises_value_error_on_unsupported_enum_value_type(self) -> None:
         class Unsupported(Enum):
-            LIST = [1]
+            LIST = [1]  # noqa: RUF012
 
         with pytest.raises(
             TypeError, match=r"Enum with values of type 'list' is not supported"
