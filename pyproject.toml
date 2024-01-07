@@ -163,21 +163,11 @@ pretty = true
 files = "src,tests"
 show_error_codes = true
 
-no_implicit_reexport = true
 no_implicit_optional = true
-strict_equality = true
 strict_optional = true
-check_untyped_defs = true
-disallow_incomplete_defs = true
-disallow_untyped_defs = true
 ignore_missing_imports = false
-local_partial_types = true
-
-warn_unused_configs = true
-warn_redundant_casts = true
-warn_unused_ignores = true
-warn_return_any = true
 warn_unreachable = true
+strict = true
 
 plugins = ["mypy_django_plugin.main"]
 
