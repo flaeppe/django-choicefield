@@ -42,19 +42,19 @@ class NullableModelAdmin(admin.ModelAdmin):  # type: ignore[type-arg]
     ...
 
 
-class IntEnum(int, Enum):
+class IntegerEnum(int, Enum):
     THREE = 3
     FOUR = 4
 
 
-class StrEnum(str, Enum):
+class StringEnum(str, Enum):
     A = "A"
     B = "B"
 
 
 class NativeEnumModel(models.Model):
-    str_enum = ChoiceField(StrEnum)
-    int_enum = ChoiceField(IntEnum)
+    str_enum = ChoiceField(StringEnum)
+    int_enum = ChoiceField(IntegerEnum)
 
     class Meta:
         app_label = "test_app"

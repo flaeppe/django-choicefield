@@ -15,10 +15,10 @@ from .test_app.models import (
     ChoiceModel,
     InlinedModel,
     IntChoice,
-    IntEnum,
+    IntegerEnum,
     NativeEnumModel,
     NullableModel,
-    StrEnum,
+    StringEnum,
     TextChoice,
 )
 
@@ -49,10 +49,10 @@ class TestSave:
         choice.refresh_from_db(fields=["text_choice", "int_choice"])
 
         native = NativeEnumModel.objects.create(
-            str_enum=StrEnum.A, int_enum=IntEnum.THREE
+            str_enum=StringEnum.A, int_enum=IntegerEnum.THREE
         )
-        assert native.str_enum is StrEnum.A
-        assert native.int_enum is IntEnum.THREE
+        assert native.str_enum is StringEnum.A
+        assert native.int_enum is IntegerEnum.THREE
         native.refresh_from_db(fields=["str_enum", "int_enum"])
 
     def test_can_save_to_database_with_enum_value(self) -> None:
@@ -64,11 +64,11 @@ class TestSave:
         assert choice.int_choice is IntChoice.ONE
 
         native = NativeEnumModel.objects.create(str_enum="A", int_enum=3)
-        assert native.str_enum is StrEnum.A
-        assert native.int_enum is IntEnum.THREE
+        assert native.str_enum is StringEnum.A
+        assert native.int_enum is IntegerEnum.THREE
         native.refresh_from_db(fields=["str_enum", "int_enum"])
-        assert native.str_enum is StrEnum.A
-        assert native.int_enum is IntEnum.THREE
+        assert native.str_enum is StringEnum.A
+        assert native.int_enum is IntegerEnum.THREE
 
     def test_can_build_and_save_with_enum(self) -> None:
         choice = ChoiceModel()
@@ -80,12 +80,12 @@ class TestSave:
         assert choice.int_choice is IntChoice.TWO
 
         native = NativeEnumModel()
-        native.str_enum = StrEnum.B
-        native.int_enum = IntEnum.FOUR
+        native.str_enum = StringEnum.B
+        native.int_enum = IntegerEnum.FOUR
         native.save()
         native.refresh_from_db(fields=["str_enum", "int_enum"])
-        assert native.str_enum is StrEnum.B
-        assert native.int_enum is IntEnum.FOUR
+        assert native.str_enum is StringEnum.B
+        assert native.int_enum is IntegerEnum.FOUR
 
     def test_raises_validation_error_saving_with_unknown_enum_value(self) -> None:
         with pytest.raises(
@@ -98,11 +98,15 @@ class TestSave:
             ChoiceModel.objects.create(text_choice="FIRST", int_choice=3)
         assert exc.value.code == "invalid"
 
-        with pytest.raises(ValidationError, match=r"'C' is not a valid StrEnum") as exc:
+        with pytest.raises(
+            ValidationError, match=r"'C' is not a valid StringEnum"
+        ) as exc:
             NativeEnumModel.objects.create(str_enum="C", int_enum=3)
         assert exc.value.code == "invalid"
 
-        with pytest.raises(ValidationError, match=r"1 is not a valid IntEnum") as exc:
+        with pytest.raises(
+            ValidationError, match=r"1 is not a valid IntegerEnum"
+        ) as exc:
             NativeEnumModel.objects.create(str_enum="A", int_enum=1)
         assert exc.value.code == "invalid"
 
@@ -137,7 +141,7 @@ class TestFilter(TestCase):
         ChoiceModel.objects.create(
             text_choice=TextChoice.FIRST, int_choice=IntChoice.TWO
         )
-        NativeEnumModel.objects.create(str_enum=StrEnum.B, int_enum=IntEnum.FOUR)
+        NativeEnumModel.objects.create(str_enum=StringEnum.B, int_enum=IntegerEnum.FOUR)
         NullableModel.objects.create()
         InlinedModel.objects.create(inlined_enum=InlinedModel.InlinedEnum.VALUE)
 
@@ -237,9 +241,11 @@ class TestUpdate(TestCase):
             ChoiceModel.objects.update(int_choice=1337)
         with pytest.raises(ValidationError, match=r"1337 is not a valid IntChoice"):
             NullableModel.objects.update(choice=1337)
-        with pytest.raises(ValidationError, match=r"'UNKNOWN' is not a valid StrEnum"):
+        with pytest.raises(
+            ValidationError, match=r"'UNKNOWN' is not a valid StringEnum"
+        ):
             NativeEnumModel.objects.update(str_enum="UNKNOWN")
-        with pytest.raises(ValidationError, match=r"1337 is not a valid IntEnum"):
+        with pytest.raises(ValidationError, match=r"1337 is not a valid IntegerEnum"):
             NativeEnumModel.objects.update(int_enum=1337)
         with pytest.raises(
             ValidationError, match=r"1337 is not a valid InlinedModel.InlinedEnum"
@@ -384,7 +390,7 @@ class TestSerialization(TestCase):
             text_choice=TextChoice.SECOND, int_choice=IntChoice.ONE
         )
         NullableModel.objects.create()
-        NativeEnumModel.objects.create(str_enum=StrEnum.B, int_enum=IntEnum.FOUR)
+        NativeEnumModel.objects.create(str_enum=StringEnum.B, int_enum=IntegerEnum.FOUR)
         InlinedModel.objects.create(inlined_enum=InlinedModel.InlinedEnum.VALUE)
 
     def serialize_and_parse(self, queryset: models.QuerySet[models.Model]) -> list[Any]:
@@ -400,8 +406,8 @@ class TestSerialization(TestCase):
 
         natives = self.serialize_and_parse(NativeEnumModel.objects.all())
         assert len(natives) == 1
-        assert natives[0].object.str_enum is StrEnum.B
-        assert natives[0].object.int_enum is IntEnum.FOUR
+        assert natives[0].object.str_enum is StringEnum.B
+        assert natives[0].object.int_enum is IntegerEnum.FOUR
 
         inlines = self.serialize_and_parse(InlinedModel.objects.all())
         assert len(inlines) == 1
@@ -439,7 +445,9 @@ class TestSerialization(TestCase):
         nullables = NullableModel.objects.values("choice")
         assert list(nullables) == [{"choice": None}]
         natives = NativeEnumModel.objects.values("str_enum", "int_enum")
-        assert list(natives) == [{"str_enum": StrEnum.B, "int_enum": IntEnum.FOUR}]
+        assert list(natives) == [
+            {"str_enum": StringEnum.B, "int_enum": IntegerEnum.FOUR}
+        ]
         inlines = InlinedModel.objects.values("inlined_default", "inlined_enum")
         assert list(inlines) == [
             {

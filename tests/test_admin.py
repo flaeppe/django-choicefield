@@ -8,9 +8,9 @@ from django.urls import reverse
 from .test_app.models import (
     ChoiceModel,
     IntChoice,
-    IntEnum,
+    IntegerEnum,
     NativeEnumModel,
-    StrEnum,
+    StringEnum,
     TextChoice,
 )
 
@@ -28,7 +28,7 @@ class TestViews(TestCase):
             text_choice=TextChoice.SECOND, int_choice=IntChoice.ONE
         )
         cls.native = NativeEnumModel.objects.create(
-            str_enum=StrEnum.B, int_enum=IntEnum.FOUR
+            str_enum=StringEnum.B, int_enum=IntegerEnum.FOUR
         )
 
     def setUp(self) -> None:
