@@ -59,11 +59,13 @@ jobs:
       - name: Run test suite
         run: tox -e django${{ matrix.django }}-py${{ matrix.py }} --skip-pkg-install
       - name: Upload coverage to Codecov
-        uses: codecov/codecov-action@v3
+        uses: codecov/codecov-action@v4
         with:
           file: ./coverage.xml
           fail_ci_if_error: true
           name: codecov-py${{ matrix.py }}
+        env:
+          CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
 
   main:
     runs-on: ubuntu-latest
