@@ -1,10 +1,22 @@
-name: CI
+name: Test
 
 on:
   push:
     branches:
       - main
+    paths:
+      - '.github/workflows/test.yaml'
+      - 'src/**'
+      - 'test/**'
+      - 'pyproject.toml'
+      - 'tox.ini'
   pull_request:
+    paths:
+      - '.github/workflows/test.yaml'
+      - 'src/**'
+      - 'test/**'
+      - 'pyproject.toml'
+      - 'tox.ini'
   schedule:
     - cron: '33 16 * * 3'  # https://crontab.guru/#33_16_*_*_3
 
@@ -18,16 +30,6 @@ env:
   PYTHONUNBUFFERED: "1"
 
 jobs:
-  lint:
-    name: Lint
-    uses: less-action/reusables/.github/workflows/pre-commit.yaml@v10
-    with:
-      python-version: "3.10"
-
-  check-build:
-    name: Check packaging
-    uses: less-action/reusables/.github/workflows/python-test-build.yaml@v10
-
   test:
     name: Test django${{ matrix.django }}-py${{ matrix.py }}
     runs-on: ubuntu-latest
