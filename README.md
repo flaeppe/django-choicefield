@@ -1,7 +1,7 @@
 <h1 align=center>Django ChoiceField</h1>
 
 <p align=center>
-    <a href="https://github.com/flaeppe/django-choicefield/actions?query=workflow%3ACI+branch%3Amain"><img src="https://github.com/flaeppe/django-choicefield/actions/workflows/ci.yaml/badge.svg?branch=main" alt="CI workflow Status"></a>
+    <a href="https://github.com/flaeppe/django-choicefield/actions?query=workflow%3ATest+branch%3Amain"><img src="https://github.com/flaeppe/django-choicefield/actions/workflows/test.yaml/badge.svg?branch=main" alt="Test workflow Status"></a>
     <a href="https://codecov.io/gh/flaeppe/django-choicefield" > <img src="https://codecov.io/gh/flaeppe/django-choicefield/branch/main/graph/badge.svg?token=SV7YKU958R"/> </a>
     <a href="https://pypi.org/project/django-choicefield/"><img src="https://img.shields.io/pypi/v/django-choicefield.svg?color=informational&label=PyPI" alt="PyPI Package"></a>
     <a href="https://pypi.org/project/django-choicefield/"><img src="https://img.shields.io/pypi/pyversions/django-choicefield.svg?color=informational&label=Python" alt="Python versions"></a>
