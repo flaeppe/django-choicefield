@@ -7,6 +7,11 @@
     <a href="https://pypi.org/project/django-choicefield/"><img src="https://img.shields.io/pypi/pyversions/django-choicefield.svg?color=informational&label=Python" alt="Python versions"></a>
 </p>
 
+A Django model field that casts enum values to its enum type. Supports all enum types
+shipped with Django and Python 3 native enum types.
+
+---
+
 ### Motivation
 
 Have you also felt annoyed by having to convert
