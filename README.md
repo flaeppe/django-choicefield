@@ -38,6 +38,8 @@ This is what `django-choicefield` helps out with. While it additionally supports
 Python's native [enum.Enum](https://docs.python.org/3/library/enum.html) to express
 column values.
 
+Modify readme
+
 ### Features
 
 #### Using Django's enumeration types
