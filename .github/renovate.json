@@ -1,0 +1,19 @@
+{
+    "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+    "extends": [
+        "config:recommended"
+    ],
+    "labels": ["dependencies"],
+    "semanticCommits": "disabled",
+    "separateMajorMinor": false,
+    "pre-commit": {
+        "enabled": true
+    },
+    "packageRules": [
+        {
+            "groupName": "pre-commit hooks",
+            "matchManagers": ["pre-commit"],
+            "description": "Update of pre-commit hooks",
+        }
+    ]
+}
