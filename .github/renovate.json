@@ -13,7 +13,7 @@
         {
             "groupName": "pre-commit hooks",
             "matchManagers": ["pre-commit"],
-            "description": "Update of pre-commit hooks",
+            "description": "Update of pre-commit hooks"
         }
     ]
 }
