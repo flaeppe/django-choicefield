@@ -4,6 +4,8 @@
         "config:recommended"
     ],
     "labels": ["dependencies"],
+    "schedule": ["before 5pm"],
+    "timezone": "Europe/Stockholm",
     "semanticCommits": "disabled",
     "separateMajorMinor": false,
     "pre-commit": {
