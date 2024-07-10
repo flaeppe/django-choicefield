@@ -53,12 +53,12 @@ jobs:
           - { py: "3.9", django: "32" }
     steps:
       - uses: actions/checkout@v4.1.7
-      - uses: actions/setup-python@v5.1.0
+      - uses: actions/setup-python@v5.1.1
         with:
           python-version: "3.12"
       - run: python -m pip install tox
       - name: Setup python for test ${{ matrix.py }} - django${{ matrix.django }}
-        uses: actions/setup-python@v5.1.0
+        uses: actions/setup-python@v5.1.1
         with:
           python-version: ${{ matrix.py }}
       - name: Setup test suite
@@ -79,12 +79,12 @@ jobs:
     name: Test django_main
     steps:
       - uses: actions/checkout@v4.1.7
-      - uses: actions/setup-python@v5.1.0
+      - uses: actions/setup-python@v5.1.1
         with:
           python-version: "3.12"
       - run: python -m pip install tox
       - name: Setup python for test 3.12 - django main branch
-        uses: actions/setup-python@v5.1.0
+        uses: actions/setup-python@v5.1.1
         with:
           python-version: "3.12"
       - name: Setup test suite
@@ -96,7 +96,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4.1.7
-      - uses: actions/setup-python@v5.1.0
+      - uses: actions/setup-python@v5.1.1
         with:
           python-version: '3.9'
       - run: pip install tox
@@ -107,7 +107,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4.1.7
-      - uses: actions/setup-python@v5.1.0
+      - uses: actions/setup-python@v5.1.1
         with:
           python-version: '3.9'
       - run: pip install tox
